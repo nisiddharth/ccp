@@ -1,6 +1,6 @@
 #!/usr/bin/sh
 
-# ccp: colour picker for X11
+# ccp: color picker for X11
 #
 # Usage: ccp [rgb|h]
 #   rgb: use rgb value instead of hex
@@ -9,16 +9,16 @@
 #
 # Written by Nishchal Siddharth Pandey <https://github.com/nisiddharth/>
 
-name="ccp"  # ccp colour picker
+name="ccp"  # ccp color picker
 image="/tmp/screen.png"
 icon="/tmp/icon.png"
-dependencies="xdotool xclip convert"
+dependencies="xdotool xclip convert notify-send"
 cr="\033[1;31m"
 cg="\033[1;32m"
 cb="\033[1;34m"
 
 #help function
-help() { printf "${cg}ccp: a x11 colour picker\n
+help() { printf "${cg}ccp: a x11 color picker\n
   Usage: ccp ${cb}[rgb|h]${cg}
   ${cb}  rgb:${cg} use rgb value instead of hex
   ${cb}    h:${cg} help
@@ -27,7 +27,7 @@ help() { printf "${cg}ccp: a x11 colour picker\n
 
 #arguments
 case "$1" in
-  *rgb*) colour_type="rgb";;
+  *rgb*) color_type="rgb";;
   *h*) help
     exit;;
   *) break;;
@@ -45,7 +45,7 @@ mousex=$(xdotool getmouselocation | awk '{ print $1 }' | awk -F: '{ print $2}')
 mousey=$(xdotool getmouselocation | awk '{ print $2 }' | awk -F: '{ print $2}')
 
 import -window root $image
-#get colour value of pixel from the taken screenshot and the x,y cordinates of mouse.
+#get color value of pixel from the taken screenshot and the x,y cordinates of mouse.
 rgb=$(convert $image -format "%[fx:int(255*p{$mousex,$mousey}.r)],%[fx:int(255*p{$mousex,$mousey}.g)],%[fx:int(255*p{$mousex,$mousey}.b)]" info:)
 hex=$(convert $image -crop 1x1+$mousex+$mousey -depth 8 txt: | tail -n +2 | awk '{ print $3 }')
 
@@ -53,7 +53,7 @@ hex=$(convert $image -crop 1x1+$mousex+$mousey -depth 8 txt: | tail -n +2 | awk 
 convert -size 50x50 xc:"$hex" "$icon"
 
 #copy rgb or hex according to the arguments
-case "$colour_type" in
+case "$color_type" in
   rgb) printf "$rgb" | xclip -sel c
     notify-send "$name" "$rgb" --icon="$icon";;
   *) printf "$hex" | xclip -sel c
