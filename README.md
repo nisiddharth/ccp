@@ -35,7 +35,7 @@ For further ease of use you can create a keyboard shortcut to run `ccp`.
       h: help
 ```
 
-## Example
+# Example
 
 ```bash
 ccp
